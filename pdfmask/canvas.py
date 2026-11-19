@@ -146,7 +146,7 @@ class PreviewView(QGraphicsView):
         self._fit = True
         self._panning = False
         self._pan_start = None
-        self.empty_text = "Choose a source folder to preview a drawing"
+        self.empty_text = "Choose a drawing file to preview it"
 
     # ----------------------------------------------------------- page / areas
     def bounds(self) -> QRectF:
@@ -166,11 +166,21 @@ class PreviewView(QGraphicsView):
         shadow = self.scene().addRect(b.translated(6, 6), QPen(Qt.NoPen), QColor(0, 0, 0, 60))
         shadow.setZValue(-1)
         self.scene().setSceneRect(b.adjusted(-40, -40, 40, 40))
+        self.set_areas(areas)
+        if self._fit:
+            self.fit()
+
+    def set_areas(self, areas: list[Area]):
+        """Replace the areas shown on the current page. Does not emit areasChanged."""
+        for it in self.items_:
+            self.scene().removeItem(it)
+        self.items_.clear()
+        b = self.bounds()
+        if b.isEmpty():
+            return
         for a in areas:
             self._add_item(QRectF(b.left() + a.x0 * b.width(), b.top() + a.y0 * b.height(),
                                   (a.x1 - a.x0) * b.width(), (a.y1 - a.y0) * b.height()))
-        if self._fit:
-            self.fit()
 
     def areas(self) -> list[Area]:
         b = self.bounds()

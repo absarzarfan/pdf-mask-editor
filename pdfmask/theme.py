@@ -16,6 +16,8 @@ MUTED = "#5E6B79"     # secondary text
 RULE = "#CBD3DB"      # borders and dividers
 TABLE = "#3B4652"     # preview backdrop, the drawing table
 REDLINE = "#C62828"   # masks only
+# Neutral steps used to tell layouts apart in the page strip; no hues, red stays for masks.
+LAYOUT_TONES = ("#DCE2E8", "#C3CBD4", "#AAB5C0")
 
 
 def stylesheet(assets: str) -> str:
@@ -31,6 +33,9 @@ QMainWindow, #Root {{ background: {FILM}; }}
 #Sidebar {{
     background: {SHEET};
     border-right: 1px solid {RULE};
+}}
+#SidebarFooter {{
+    background: {SHEET}; border-top: 1px solid {RULE}; border-right: 1px solid {RULE};
 }}
 #StepTitle {{ font-weight: 600; font-size: 10.5pt; }}
 #StepNumber {{
@@ -63,6 +68,14 @@ QPushButton#Primary {{
 QPushButton#Primary:hover {{ background: {INK_SOFT}; }}
 QPushButton#Primary:disabled {{ background: #8F9BA8; color: #E9EDF1; }}
 
+QPushButton#Segment {{
+    background: {SHEET}; border: 1px solid {RULE}; padding: 6px 10px; font-weight: 500;
+}}
+QPushButton#Segment:checked {{ background: {INK}; color: {SHEET}; border-color: {INK}; }}
+QPushButton#Segment:!checked:hover {{ background: {FILM}; }}
+QPushButton#Segment[side="left"] {{ border-top-right-radius: 0; border-bottom-right-radius: 0; }}
+QPushButton#Segment[side="right"] {{ border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: none; }}
+
 QPushButton#Ghost {{ border: none; background: transparent; color: {MUTED}; padding: 4px 6px; }}
 QPushButton#Ghost:hover {{ color: {INK}; text-decoration: underline; }}
 
@@ -73,6 +86,15 @@ QListWidget {{
 QListWidget::item {{ padding: 6px 6px; border-radius: 3px; }}
 QListWidget::item:hover {{ background: {FILM}; }}
 QListWidget::item:selected {{ background: {INK}; color: {SHEET}; }}
+
+QLineEdit#RowName {{
+    background: transparent; border: 1px solid transparent; padding: 3px 4px; font-weight: 600;
+}}
+QLineEdit#RowName:focus {{ border: 1px solid {INK}; background: {SHEET}; }}
+QLineEdit#RowRange {{ padding: 3px 6px; }}
+#RowCount {{ color: {MUTED}; font-size: 9pt; }}
+QListWidget#LayoutList::item {{ padding: 0; }}
+QListWidget#LayoutList::item:selected {{ background: {FILM}; color: {INK}; border: 1px solid {INK}; }}
 
 QCheckBox {{ spacing: 8px; }}
 QCheckBox::indicator {{
@@ -96,6 +118,8 @@ QProgressBar::chunk {{ background: {INK}; border-radius: 2px; }}
 
 #Toolbar {{ background: {SHEET}; border-bottom: 1px solid {RULE}; }}
 #PageLabel {{ color: {MUTED}; }}
+#StripBar {{ background: {SHEET}; border-bottom: 1px solid {RULE}; }}
+#StripCaption {{ color: {MUTED}; font-size: 9pt; }}
 #FileTitle {{ font-weight: 600; }}
 
 #FilesPanel {{ background: {SHEET}; border-left: 1px solid {RULE}; }}
